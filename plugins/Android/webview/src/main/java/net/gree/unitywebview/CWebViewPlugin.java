@@ -38,6 +38,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -65,6 +66,7 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.widget.FrameLayout;
 import android.webkit.PermissionRequest;
+import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import androidx.core.content.FileProvider;
 // import android.support.v4.app.ActivityCompat;
@@ -590,6 +592,14 @@ public class CWebViewPlugin extends Fragment {
                     canGoBack = webView.canGoBack();
                     canGoForward = webView.canGoForward();
                     mWebViewPlugin.call("CallOnError", errorCode + "\t" + description + "\t" + failingUrl);
+                }
+
+                @Override
+                public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                    webView.loadUrl("about:blank");
+                    canGoBack = webView.canGoBack();
+                    canGoForward = webView.canGoForward();
+                    mWebViewPlugin.call("CallOnError", "SSL Error" + "\t" + error.getUrl() + "\t" + error.toString());
                 }
 
                 @Override
