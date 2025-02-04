@@ -589,6 +589,7 @@ public class CWebViewPlugin extends Fragment {
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                    Log.d("CWebViewPlugin", "onReceivedError 1");
                     webView.loadUrl("about:blank");
                     canGoBack = webView.canGoBack();
                     canGoForward = webView.canGoForward();
@@ -597,6 +598,7 @@ public class CWebViewPlugin extends Fragment {
 
                 @Override
                 public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                    Log.d("CWebViewPlugin", "onReceivedError 2");
                     webView.loadUrl("about:blank");
                     canGoBack = webView.canGoBack();
                     canGoForward = webView.canGoForward();
@@ -605,9 +607,8 @@ public class CWebViewPlugin extends Fragment {
 
                 @Override
                 public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                    webView.loadUrl("about:blank");
-                    canGoBack = webView.canGoBack();
-                    canGoForward = webView.canGoForward();
+                    Log.d("CWebViewPlugin", "onReceivedSslError");
+                    handler.cancel();
                     mWebViewPlugin.call("CallOnError", "SSL Error" + "\t" + error.getUrl() + "\t" + error.toString());
                 }
 
